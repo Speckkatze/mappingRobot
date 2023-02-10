@@ -59,40 +59,40 @@ def driveStraight(dir, quartRots):
         GPIO.output(step_pin0, GPIO.LOW)
         GPIO.output(step_pin1, GPIO.LOW)
         time.sleep(delay)
+    # motors turn off
     GPIO.output(enable_pin0, GPIO.LOW)
     GPIO.output(enable_pin1, GPIO.LOW)
     
 
+# Function to let motors spin in the same direction for turning
 def driveTurn(turnDir, eighthRot):
-    turnSteps = eighthRot*50
-    delay = 0.001
-    if turnDir == 0:
+    turnSteps = eighthRot*50        # !!!SPACEHOLDER!!! steps needed for 45° rotation of robot
+    delay = 0.001                   # bigger delay for lower turn rate
+    if turnDir == 0:    # motors set in same direction
         GPIO.output(dir_pin0, GPIO.HIGH)
         GPIO.output(dir_pin1, GPIO.HIGH)
-    elif turnDir == 1:
+    elif turnDir == 1:  # motors set in same opposite direction
         GPIO.output(dir_pin0, GPIO.LOW)
         GPIO.output(dir_pin1, GPIO.LOW)
     else:
         raise ValueError("turnDir not a correct value (0 for left turn, 1 for right turn)")
+    # motors turn on
     GPIO.output(enable_pin0, GPIO.HIGH)
     GPIO.output(enable_pin1, GPIO.HIGH)
-    
-    
-    for i in range(turnSteps):
+    for i in range(turnSteps):  # motors go set amount of steps
         GPIO.output(step_pin0, GPIO.HIGH)
         GPIO.output(step_pin1, GPIO.HIGH)
-        time.sleep(delay)
+        time.sleep(delay)       # delay between steps
         GPIO.output(step_pin0, GPIO.LOW)
         GPIO.output(step_pin1, GPIO.LOW)
         time.sleep(delay)
-
+    # motors turn off
     GPIO.output(enable_pin0, GPIO.LOW)
     GPIO.output(enable_pin1, GPIO.LOW)
 
 driveStraight(0, 40)
 time.sleep(0.5)
 driveTurn(0, 20)
-
 
 
 # Clean up the GPIO pins
