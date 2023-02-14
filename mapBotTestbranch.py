@@ -21,7 +21,7 @@ delay = 0.0005
 GPIO.setmode(GPIO.BCM)
 
 # Set the input pins for push buttons
-GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(26, GPIO.IN)
 
 # Set up the GPIO pins
 # motor 1
@@ -94,11 +94,10 @@ while GPIO.input(26) == GPIO.LOW:
         GPIO.output(enable_pin0, GPIO.LOW)
         GPIO.output(enable_pin1, GPIO.LOW)
     time.sleep(0.25)
+    driveStraight(0, 40)
+    time.sleep(0.5)
+    driveTurn(0, 20)
+else:
 
-driveStraight(0, 40)
-time.sleep(0.5)
-driveTurn(0, 20)
-
-
-# Clean up the GPIO pins
-GPIO.cleanup()
+    # Clean up the GPIO pins
+    GPIO.cleanup()
