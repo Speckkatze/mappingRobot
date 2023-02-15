@@ -1,4 +1,5 @@
 import time
+import math
 import RPi.GPIO as GPIO
 
 
@@ -102,10 +103,17 @@ while GPIO.input(26) == GPIO.LOW:
         driveStraight(1,2)  # get distance from wall
         delay.sleep(1)      # wait
         driveTurn(0, 3)
-        vectorCalculate()   # does the compass calculation stuff and transmission for later mapping
+        vectorCalculate(2)   # does the compass calculation stuff and transmission for later mapping
 
-    def vectorCalculate():
-        # TODO: all the vector stuff, angle
+    def vectorCalculate(quarrots):
+        radius = quarrots * 5
+        angle = 10 # compass angle
+        x = radius * math.cos(math.radians(angle))
+        y = radius * math.sin(math.radians(angle))
+        return (x, y)
+        # TODO: integration of compass angle
+        # https://tutorials-raspberrypi.com/build-your-own-raspberry-pi-compass-hmc5883l/
+        # https://github.com/Slaveche90/gy271compass
         # https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
         # x=r*sin, y=r*cos
 
