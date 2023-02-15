@@ -17,11 +17,13 @@ mode_pins1 = (21, 22, 27)
 # Define the delay between steps
 delay = 0.0005
 
+turnDirIndicator = False
+
 # Set the GPIO mode
 GPIO.setmode(GPIO.BCM)
 
 # Set the input pins for push buttons
-GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(26, GPIO.IN)
 
 # Set up the GPIO pins
 # motor 1
@@ -38,6 +40,7 @@ GPIO.setup(enable_pin1, GPIO.OUT)
 GPIO.output(enable_pin0, GPIO.LOW)
 GPIO.output(enable_pin1, GPIO.LOW)
 
+print(GPIO.input(26))
 
 # Run code until stop button is pressed
 while GPIO.input(26) == GPIO.LOW:
@@ -70,8 +73,8 @@ while GPIO.input(26) == GPIO.LOW:
 
     # Function to let motors spin in the same direction for turning
     def driveTurn(turnDir, eighthRot):
-        turnSteps = eighthRot*50        # !!!SPACEHOLDER!!! steps needed for 45° rotation of robot
-        delay = 0.001                   # bigger delay for lower turn rate
+        turnSteps = eighthRot*63        # !!!SPACEHOLDER!!! steps needed for 45° rotation of robot
+        delay = 0.005                   # bigger delay for lower turn rate
         if turnDir == 0:    # motors set in same direction
             GPIO.output(dir_pin0, GPIO.HIGH)
             GPIO.output(dir_pin1, GPIO.HIGH)
@@ -93,12 +96,28 @@ while GPIO.input(26) == GPIO.LOW:
         # motors turn off
         GPIO.output(enable_pin0, GPIO.LOW)
         GPIO.output(enable_pin1, GPIO.LOW)
+
+    def wallHit():
+        turnDirIndicator = not turnDirIndicator
+        driveStraight(1,2)  # get distance from wall
+        delay.sleep(1)      # wait
+        driveTurn(0, 3)
+        vectorCalculate()   # does the compass calculation stuff and transmission for later mapping
+
+    def vectorCalculate():
+        # TODO: all the vector stuff, angle
+        # https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
+        # x=r*sin, y=r*cos
+
+
+
+
     time.sleep(0.25)
 
-driveStraight(0, 40)
-time.sleep(0.5)
-driveTurn(0, 20)
+    driveStraight(0, 40)
+    time.sleep(0.5)
+    driveTurn(0, 4)
+else:
 
-
-# Clean up the GPIO pins
-GPIO.cleanup()
+    # Clean up the GPIO pins
+    GPIO.cleanup()
