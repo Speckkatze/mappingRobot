@@ -1,7 +1,10 @@
 import time
 import math
 import RPi.GPIO as GPIO
+from PIL import Image
 
+# generate white png to function as map
+map = Image.new('RGB', (1000, 1000), (255, 255, 255))
 
 # Define the pins for the DRV8825 stepper driver (motor 1)
 dir_pin0 = 13
@@ -21,6 +24,9 @@ straightStepCounter = 0
 turnStepCounter = 0
 vectorArray = []
 angle = 0                   # 11.2 turn steps = 1° turn 
+# coords start out in the middle of the png
+xCoord = 500
+yCoord = 500
 
 turnDirIndicator = False
 
@@ -31,7 +37,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(11, GPIO.IN) # off switch
 GPIO.setup(8, GPIO.IN)  # bumper 1 (left)
 GPIO.setup(9, GPIO.IN)  # bumper 2 (middle)
-GPIO.setup(10, GPIO.IN) # bumper 3 (right)
+GPIO.setup(23, GPIO.IN) # bumper 3 (right)
 
 # Set up the GPIO pins
 # motor 1
@@ -57,7 +63,6 @@ while GPIO.input(11) == GPIO.LOW:
 
     def driveStraight(dir, quartRots):
         straightStepCounter = 0
-        straightSteps = quartRots*8    # 200 steps = full rotation, 50 steps = 1/4 rotation
         delay = 0.0005                  # smaller delay for faster turn rate
         if dir == 0:    # motors direction set in different directions
             GPIO.output(dir_pin0, GPIO.LOW)
@@ -68,11 +73,14 @@ while GPIO.input(11) == GPIO.LOW:
         else:
             raise ValueError("dir not a correct value (0 for forwards, 1 for backwards)")
         # motors turn on
+        print(quartRots)
         GPIO.output(enable_pin0, GPIO.HIGH)
         GPIO.output(enable_pin1, GPIO.HIGH)
         for i in range(quartRots):
-            for i in range(straightSteps):
+            for i in range(8):
                 if stopButtonPress():
+                    break
+                if bumper1Press() or bumper2Press() or bumper3Press():
                     break
                 for i in range(50):  # motors go set amount of steps
                     GPIO.output(step_pin0, GPIO.HIGH)
@@ -82,7 +90,7 @@ while GPIO.input(11) == GPIO.LOW:
                     GPIO.output(step_pin1, GPIO.LOW)
                     time.sleep(delay)
                 straightStepCounter = straightStepCounter + 50
-        vectorCalculate(straightStepCounter)
+                # vectorCalculate(straightStepCounter)
         # motors turn off
         GPIO.output(enable_pin0, GPIO.LOW)
         GPIO.output(enable_pin1, GPIO.LOW)
@@ -105,7 +113,7 @@ while GPIO.input(11) == GPIO.LOW:
         GPIO.output(enable_pin0, GPIO.HIGH)
         GPIO.output(enable_pin1, GPIO.HIGH)
         for i in range(eighthRot):
-            for i in range(turnSteps):
+            for i in range(8):
                 if stopButtonPress():
                     break
                 for i in range(63):  # motors go set amount of steps
@@ -117,9 +125,9 @@ while GPIO.input(11) == GPIO.LOW:
                     time.sleep(delay)
                 turnStepCounter = turnStepCounter + 63
         if turnDir == 0:
-            addDegrees(-turnStepCounter / 11.2)
+            addDegrees(0 - (turnStepCounter / 11.2))
         elif turnDir == 1:
-            addDegrees(turnStepCounter / 11.2)
+            addDegrees(0 + (turnStepCounter / 11.2))
         # motors turn off
         GPIO.output(enable_pin0, GPIO.LOW)
         GPIO.output(enable_pin1, GPIO.LOW)
@@ -149,29 +157,39 @@ while GPIO.input(11) == GPIO.LOW:
 
     def bumper1Press():
         if GPIO.input(8) == GPIO.HIGH:
+            print("Bumper 1 pressed")
             return True
     def bumper2Press():
         if GPIO.input(9) == GPIO.HIGH:
+            print("Bumper 2 pressed")
             return True
     def bumper3Press():
-        if GPIO.input(10) == GPIO.HIGH:
+        if GPIO.input(23) == GPIO.HIGH:
+            print("Bumper 3 pressed")
             return True
 
     def addDegrees(degAdd):
-        result = angle + degAdd
+        result =+ degAdd
         if result > 360:
             result -= 360
         elif result < 1:
             result += 360
-        angle = result
 
+    def plotPointOnMap(wallOrNoWall, x, y):
+        pixels = map.load()
+        if wallOrNoWall == 0:
+            pixels[x, y] = (144, 12, 63)
+        elif wallOrNoWall == 1:
+            pixels[x, y] = (0, 0, 0)
+        
 
     time.sleep(0.25)
 
-    driveStraight(0, 4)
+    driveStraight(0, 10)
     time.sleep(0.5)
-    driveTurn(0, 4)
+    driveTurn(0, 1)
 else:
 
     # Clean up the GPIO pins
+    map.save("mapOfRoom.png")
     GPIO.cleanup()
