@@ -27,7 +27,7 @@ angle = 0                   # 11.2 turn steps = 1° turn
 # coords start out in the middle of the png
 xCoord = 500
 yCoord = 500
-isBumped = 0
+isBumped = True
 
 
 turnDirIndicator = False
@@ -63,7 +63,8 @@ while GPIO.input(11) == GPIO.LOW:
 
 
     def driveStraight(dir, quartRots):
-        isBumped = 0
+        global isBumped
+        isBumped = True
         straightStepCounter = 0
         delay = 0.0005                  # smaller delay for faster turn rate
         if dir == 0:    # motors direction set in different directions
@@ -77,26 +78,27 @@ while GPIO.input(11) == GPIO.LOW:
         # motors turn on
         GPIO.output(enable_pin0, GPIO.HIGH)
         GPIO.output(enable_pin1, GPIO.HIGH)
-        for i in range(quartRots) and isBumped == 0:
-            for i in range(8):
-                if stopButtonPress():
-                    break
-                if bumper1Press() or bumper2Press() or bumper3Press():
-                    isBumped = 1
-                    vectorCalculate(straightStepCounter, 0)
-                    if bumper1Press() or bumper2Press():
-                        wallHit(1)                          # turn right when hit with left or middle bumper
-                    elif bumper3Press():
-                        wallHit(0)                          # turn left when hit with right bumper
-                    break
-                for i in range(50):  # motors go set amount of steps
-                    GPIO.output(step_pin0, GPIO.HIGH)
-                    GPIO.output(step_pin1, GPIO.HIGH)
-                    time.sleep(delay)           # delay between steps
-                    GPIO.output(step_pin0, GPIO.LOW)
-                    GPIO.output(step_pin1, GPIO.LOW)
-                    time.sleep(delay)  
-                straightStepCounter = straightStepCounter + 50
+        for i in range(quartRots):
+            if isBumped:
+                for i in range(8):
+                    if stopButtonPress():
+                        break
+                    if bumper1Press() or bumper2Press() or bumper3Press():
+                        isBumped = False
+                        vectorCalculate(straightStepCounter, 0)
+                        if bumper1Press() or bumper2Press():
+                            wallHit(1)                          # turn right when hit with left or middle bumper
+                        elif bumper3Press():
+                            wallHit(0)                          # turn left when hit with right bumper
+                        break
+                    for i in range(50):  # motors go set amount of steps
+                        GPIO.output(step_pin0, GPIO.HIGH)
+                        GPIO.output(step_pin1, GPIO.HIGH)
+                        time.sleep(delay)           # delay between steps
+                        GPIO.output(step_pin0, GPIO.LOW)
+                        GPIO.output(step_pin1, GPIO.LOW)
+                        time.sleep(delay)  
+                    straightStepCounter = straightStepCounter + 50
         # motors turn off
 
         # TODO vector calculate
@@ -149,21 +151,39 @@ while GPIO.input(11) == GPIO.LOW:
             print(angle)
 
     def wallHit(dir):
-        turnDirIndicator = not turnDirIndicator
-        driveStraight(1,4)  # get distance from wall
-        delay.sleep(1)      # wait
+        delay = 0.0005                  # smaller delay for faster turn rate
+        GPIO.output(dir_pin0, GPIO.HIGH)
+        GPIO.output(dir_pin1, GPIO.LOW)
+        # motors turn on
+        GPIO.output(enable_pin0, GPIO.HIGH)
+        GPIO.output(enable_pin1, GPIO.HIGH)
+        for i in range(1600):  # motors go set amount of steps
+            GPIO.output(step_pin0, GPIO.HIGH)
+            GPIO.output(step_pin1, GPIO.HIGH)
+            time.sleep(delay)           # delay between steps
+            GPIO.output(step_pin0, GPIO.LOW)
+            GPIO.output(step_pin1, GPIO.LOW)
+            time.sleep(delay)  
+        GPIO.output(enable_pin0, GPIO.LOW)
+        GPIO.output(enable_pin1, GPIO.LOW)
+        vectorCalculate(-1600, 1)
+        time.sleep(1)      # wait
         driveTurn(dir, 3)
 
     def vectorCalculate(steps, wallIndicator):
         radius = math.floor(steps * 0.1 * 0.1276)
         global angle
         global vectorArray
-        global x
-        global y
-        x += radius * math.cos(math.radians(angle))
-        y += radius * math.sin(math.radians(angle))
+        global xCoord
+        global yCoord
+        x = 0
+        y = 0
+        x = radius * math.cos(math.radians(angle))
+        y = radius * math.sin(math.radians(angle))
+        xCoord += x
+        yCoord += y
         vectorArray.append([x,y])
-        plotPointOnMap(wallIndicator, x, y)
+        plotPointOnMap(wallIndicator, xCoord, yCoord)
 
         # TODO: integration of compass angle
         # https://tutorials-raspberrypi.com/build-your-own-raspberry-pi-compass-hmc5883l/
@@ -203,7 +223,7 @@ while GPIO.input(11) == GPIO.LOW:
     def plotPointOnMap(wallOrNoWall, x, y):
         pixels = map.load()
         if wallOrNoWall == 0:
-            pixels[x, y] = (144, 12, 63)
+            pixels[x, y] = (255, 0, 0)
         elif wallOrNoWall == 1:
             pixels[x, y] = (0, 0, 0)
         
