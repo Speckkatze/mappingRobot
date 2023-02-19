@@ -171,7 +171,7 @@ while GPIO.input(11) == GPIO.LOW:
         driveTurn(dir, 3)
 
     def vectorCalculate(steps, wallIndicator):
-        radius = math.floor(steps * 0.1 * 0.1276)
+        radius = steps * 0.1 * 0.13125
         global angle
         global vectorArray
         global xCoord
@@ -211,9 +211,9 @@ while GPIO.input(11) == GPIO.LOW:
     def addDegrees(direction, degAdd):
         global angle
         if direction == 1:
-            angle = angle - degAdd / 11.2
+            angle = angle - degAdd / 11.70202
         elif direction == 0:
-            angle = angle + degAdd / 11.2
+            angle = angle + degAdd / 11.70202
 
         if angle > 360:
             angle -= 360
@@ -227,7 +227,6 @@ while GPIO.input(11) == GPIO.LOW:
         elif wallOrNoWall == 1:
             pixels[x, y] = (0, 0, 0)
         
-
     time.sleep(0.1)    # time delay between loops
 
     driveStraight(0, 4)
@@ -235,4 +234,5 @@ else:
 
     # Clean up the GPIO pins
     map.save("mapOfRoom.png")
+    print(vectorArray)
     GPIO.cleanup()
