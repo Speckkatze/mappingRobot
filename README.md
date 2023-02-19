@@ -20,3 +20,8 @@ WHAT YOU NEED:
   All STL files here:
   
   PLA recommended, chassis needs to be slightly flexible to fit motors
+  
+  
+HOW TO USE:
+  
+  Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the same   directory once the robot stops (off button)
