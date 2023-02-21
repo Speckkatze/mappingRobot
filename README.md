@@ -27,3 +27,6 @@ HOW TO USE:
   
   Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the
   same directory once the robot stops (off button)
+  
+  Website is not needed, but is a nice addition too see current progress of map. Simply host index.html on the pi and access its ip in the local network. It
+  should reload the page every five seconds.
