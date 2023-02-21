@@ -5,17 +5,18 @@ Robot which drives arrount and creates a (somewhat) accurate map of your space.
 WHAT YOU NEED:
   
   - 1x Raspberry Pi 4b + microSD card
-  - 1x Waveshare Stepper Motor HAT
+  - 1x Waveshare Stepper Motor HAT  (https://www.waveshare.com/wiki/Stepper_Motor_HAT)
   - 2x NEMA 17 Stepper Motor 1.5a 12v (shouldnt be bigger than 42x42x39mm, otherwise you wont be able to fit them)
   - 1x 5a12v DC PSU
-  - 4x Arduino 6x6mm push button
+  - 4x Arduino 6x6mm push button    (7 if you want some on the breadboard for debugging, recommended)
   - 3x ballpen spring 20mm
   - 4x 10koh resistor
   - 4x 100oh resistor
   - 8x m3 12mm screw
   - cables to connect pins with buttons
   - zipties
-  - Breadboard (not strictly needed but makes it easier)
+  - Breadboard (not strictly needed but makes it easier by requiring less soldering)
+  - glue
   
   All STL files here:
   
@@ -24,4 +25,5 @@ WHAT YOU NEED:
   
 HOW TO USE:
   
-  Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the same   directory once the robot stops (off button)
+  Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the
+  same directory once the robot stops (off button)
