@@ -4,7 +4,8 @@ import RPi.GPIO as GPIO
 from PIL import Image
 
 # generate white png to function as map
-map = Image.new('RGB', (1000, 1000), (255, 255, 255))
+map = Image.new("RGB", (1000, 1000), (255, 255, 255))
+map.save("mapOfRoom.png")   # save map
 
 # Define the pins for the DRV8825 stepper driver (motor 1)
 dir_pin0 = 13
@@ -221,11 +222,13 @@ while GPIO.input(11) == GPIO.LOW:
             angle += 360
 
     def plotPointOnMap(wallOrNoWall, x, y):
+        map = Image.open("mapOfRoom.png")
         pixels = map.load()
         if wallOrNoWall == 0:
             pixels[x, y] = (255, 0, 0)
         elif wallOrNoWall == 1:
             pixels[x, y] = (0, 0, 0)
+        map.save("mapOfRoom.png")
         
     time.sleep(0.1)    # time delay between loops
 
