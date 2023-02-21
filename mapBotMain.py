@@ -222,7 +222,7 @@ while GPIO.input(11) == GPIO.LOW:
             angle += 360
 
     def plotPointOnMap(wallOrNoWall, x, y):
-        map = Image.open("mapofRoom.png")
+        map = Image.open("mapOfRoom.png")
         pixels = map.load()
         if wallOrNoWall == 0:
             pixels[x, y] = (255, 0, 0)
