@@ -27,3 +27,6 @@ HOW TO USE:
   
   Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the
   same directory once the robot stops (off button)
+
+  If you want to see the current progress of the map, host index.html on the pi in your local network. This is not required for it to work (you can just
+  download the mapOfRoom.png file once the robot is finished), but its usefull nonetheless. I used NGINX for it, but you can use anything, really.
