@@ -24,6 +24,8 @@ WHAT YOU NEED:
   
   All STL files here:
   
+  https://www.thingiverse.com/thing:5879150
+  
   PLA recommended, chassis needs to be slightly flexible to fit motors
   
   
