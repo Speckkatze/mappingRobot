@@ -1,4 +1,8 @@
 # mappingRobot
+
+IF YOU ARE ACTUALLY LOOKING FOR A ROBOT TO MAP YOUR ROOM, THIS IS NOT WHAT YOU ARE LOOKING FOR. THIS IS JUST A SCHOOL PROJECT AND PROOF OF CONCEPT, AND WHILE IT DOES WORK, IT DOES NOT WORK WELL ENOUGH TO ACTUALLY CREATE A MAP OF YOUR ROOM THATS USEFUL FOR ANYTHING. JUST USE A MEASURING TAPE.
+
+
 Robot which drives arrount and creates a (somewhat) accurate map of your space. 
 
 
@@ -19,6 +23,8 @@ WHAT YOU NEED:
   - glue
   
   All STL files here:
+  
+  https://www.thingiverse.com/thing:5879150
   
   PLA recommended, chassis needs to be slightly flexible to fit motors
   
