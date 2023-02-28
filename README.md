@@ -1,4 +1,8 @@
 # mappingRobot
+
+IF YOU ARE ACTUALLY LOOKING FOR A ROBOT TO MAP YOUR ROOM, THIS IS NOT WHAT YOU ARE LOOKING FOR. THIS IS JUST A SCHOOL PROJECT AND PROOF OF CONCEPT, AND WHILE IT DOES WORK, IT DOES NOT WORK WELL ENOUGH TO ACTUALLY CREATE A MAP OF YOUR ROOM THATS USEFUL FOR ANYTHING. JUST USE A MEASURING TAPE.
+
+
 Robot which drives arrount and creates a (somewhat) accurate map of your space. 
 
 
@@ -20,6 +24,8 @@ WHAT YOU NEED:
   
   All STL files here:
   
+  https://www.thingiverse.com/thing:5879150
+  
   PLA recommended, chassis needs to be slightly flexible to fit motors
   
   
@@ -27,6 +33,6 @@ HOW TO USE:
   
   Once you built the robot, connect with the raspberry pi with ssh, download mapBotMain.py, run file from terminal. New .png file will get generated in the
   same directory once the robot stops (off button)
-
-  If you want to see the current progress of the map, host index.html on the pi in your local network. This is not required for it to work (you can just
-  download the mapOfRoom.png file once the robot is finished), but its usefull nonetheless. I used NGINX for it, but you can use anything, really.
+  
+  Website is not needed, but is a nice addition too see current progress of map. Simply host index.html on the pi and access its ip in the local network. It
+  should reload the page every five seconds.
