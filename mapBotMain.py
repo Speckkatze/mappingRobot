@@ -115,7 +115,6 @@ while GPIO.input(11) == GPIO.LOW:
     # Function to let motors spin in the same direction for turning
     def driveTurn(turnDir, eighthRot):
         turnStepCounter = 0
-        turnSteps = eighthRot*8       # steps needed for 45° rotation of robot
         delay = 0.002                   # bigger delay for lower turn rate
         if turnDir == 0:    # motors set in same direction
             GPIO.output(dir_pin0, GPIO.HIGH)
@@ -141,15 +140,12 @@ while GPIO.input(11) == GPIO.LOW:
                     time.sleep(delay)
                 turnStepCounter = turnStepCounter + 63
         # motors turn off
-        print(angle)
         GPIO.output(enable_pin0, GPIO.LOW)
         GPIO.output(enable_pin1, GPIO.LOW)
         if turnDir == 0:
             addDegrees(0, turnStepCounter)
-            print(angle)
         elif turnDir == 1:
             addDegrees(1, turnStepCounter)
-            print(angle)
 
     def wallHit(dir):
         delay = 0.0005                  # smaller delay for faster turn rate
@@ -186,26 +182,17 @@ while GPIO.input(11) == GPIO.LOW:
         vectorArray.append([x,y])
         plotPointOnMap(wallIndicator, xCoord, yCoord)
 
-        # TODO: integration of compass angle
-        # https://tutorials-raspberrypi.com/build-your-own-raspberry-pi-compass-hmc5883l/
-        # https://github.com/Slaveche90/gy271compass
-        # https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
-        # x=r*sin, y=r*cos
-
     def stopButtonPress():
         if GPIO.input(11) == GPIO.HIGH:
             return True
     def bumper1Press():
         if GPIO.input(8) == GPIO.HIGH:
-            print("Bumper 1 pressed")
             return True
     def bumper2Press():
         if GPIO.input(9) == GPIO.HIGH:
-            print("Bumper 2 pressed")
             return True
     def bumper3Press():
         if GPIO.input(23) == GPIO.HIGH:
-            print("Bumper 3 pressed")
             return True
 
     # function to change degrees, takes direction and actual rotation distance into account. Also makes sure that angle is always 1-360°
